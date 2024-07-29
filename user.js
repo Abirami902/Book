@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
 const userSchema=new mongoose.Schema({
-    bookname:{
+    Name:{
         type:String
     },
-    author:{
+    Place:{
         type:String
     },
-    des:{
+    Phone:{
         type:String
     },
-    rate:{
-        type:Number
+    username:{
+        type:String
     },
-    img:{
+    password:{
         type:String
     }
 })
