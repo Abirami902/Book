@@ -16,7 +16,7 @@ const navigate=useNavigate()
     let handleSubmit=async()=>{
 try{
 
-    let response=await axios.post('http://localhost:5000/signin',data)
+    let response=await axios.post('http://localhost:4000/signin',data)
     console.log(response);
     toast.success('Registration successful')
     navigate('/login')
@@ -44,9 +44,58 @@ pauseOnHover
 theme="light"
 />
 
-Username :<input type="" name='username' onChange={handleChange} /><br></br>
-Password :<input type="" name='password' onChange={handleChange} /><br></br>
-<button onClick={handleSubmit}>Sign in</button>
+
+<div className="App">
+      <div className="register-container">
+        <h2>Register</h2>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              name='Name'
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="phone">Phone</label>
+            <input
+              type="text"
+              id="phone"
+              name='phone'
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="place">Place</label>
+            <input
+              type="text"
+               name='place'
+              id="place"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type=""
+              name='username'
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type=""
+              name='password'
+              onChange={handleChange}
+            />
+          </div>
+          <button  onClick={handleSubmit}>Sign in</button>
+      </div>
+    </div>
+
+
     </div>
   )
 }

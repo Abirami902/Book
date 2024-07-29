@@ -16,10 +16,10 @@ const navigate=useNavigate()
     let handleSubmit=async()=>{
 try{
 
-    let response=await axios.post('http://localhost:5000/login',data)
+    let response=await axios.post('http://localhost:4000/login',data)
     console.log(response);
     toast.success('login successful')
-    navigate('/register')
+    navigate('/Addbook')
 }
 catch(e){
     console.log(e);
@@ -44,10 +44,39 @@ pauseOnHover
 theme="light"
 />
 
-Username :<input type="" name='username' onChange={handleChange} /><br></br>
-Password :<input type="" name='password' onChange={handleChange} /><br></br>
-<button onClick={handleSubmit}>Login</button>
+
+
+
+
+<div className="App">
+      <div className="login-container">
+        <h2>Login</h2>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type=""
+              name='username'
+              id="username"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type=""
+              name='password'
+              id="password"
+              onChange={handleChange}
+            />
+          </div>
+          <button onClick={handleSubmit} >Login</button>
+      </div>
     </div>
+
+
+    </div>
+
+    
   )
 }
 

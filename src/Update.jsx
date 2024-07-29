@@ -1,48 +1,88 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Update = () => {
-    let {id}=useParams()
-    const [data,setData]=useState()
-    const [user,setUser]=useState('')
+    let { id } = useParams();
+    const [data, setData] = useState({
+        bookname: '',
+        author: '',
+        des: '',
+        rate: '',
+        img: ''
+    });
+    const [user, setUser] = useState({});
 
-    useEffect(()=>{
-        let fetchData=async()=>{
+    useEffect(() => {
+        let fetchData = async () => {
+            try {
+                let response = await axios.get(`http://localhost:4000/findOne/${id}`);
+                setUser(response.data);
+                setData(response.data); // Initialize data with fetched user data
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
+    }, [id]);
 
-            let response=await axios.get(`http://localhost:5000/findOne/${id}`)
+    let handleChange = (event) => {
+        setData({ ...data, [event.target.name]: event.target.value });
+    };
+
+    let navigate = useNavigate();
+
+    let handleSubmit = async () => {
+        try {
+            let response = await axios.put(`http://localhost:4000/updateOne/${id}`, data);
             console.log(response);
-            setUser(response.data)
+            navigate('/');
+        } catch (error) {
+            console.error("Error updating data:", error);
         }
-        fetchData()
-    },[])
+    };
 
-    let handleChange=(event)=>{
-        setData({...data,[event.target.name]:event.target.value})
-    
-    }
-let navigate = useNavigate()
+    return (
+        <div className='bg'>
+            <input 
+                type="text" 
+                placeholder={user.bookname} 
+                name='bookname' 
+                value={data.bookname}
+                onChange={handleChange} 
+            />
+            <input 
+                type="text" 
+                placeholder={user.author} 
+                name='author' 
+                value={data.author}
+                onChange={handleChange} 
+            />
+            <input 
+                type="text" 
+                placeholder={user.des} 
+                name='des' 
+                value={data.des}
+                onChange={handleChange} 
+            />
+            <input 
+                type="number" 
+                placeholder={user.rate} 
+                name='rate' 
+                value={data.rate}
+                onChange={handleChange} 
+            />
+            <input 
+                type="file" 
+                onChange={handleChange} 
+                name='img'
+                id="image" 
+                alt="bookimg" 
+                src={user.img}
+            />
+            <button onClick={handleSubmit}>update</button>
+        </div>
+    );
+};
 
-    let handleSubmit=async ()=>{
-        let response=await axios.put(`http://localhost:5000/updateOne/${id}`,data)
-        console.log(response);
-    navigate('/')
-
-
-    }
-  return (
-    <div className='bg'>
-        <input type="" placeholder={user.bookname} name='bookname' onChange={handleChange} />
-        <input type="" placeholder={user.author} name='author' onChange={handleChange} />
-        <input type="" placeholder={user.des} name='des' onChange={handleChange} />
-        <input type="number" placeholder={user.rate} name='rate' onChange={handleChange} />
-        <input type="image" placeholder={user.img}  onChange={handleChange} id="image" alt="bookimg" src="C:\Users\HP\OneDrive\Desktop\FORTUNE\bio\1.jpg" />
-       
-
-<button onClick={handleSubmit}>update</button>
-
-    </div>
-  )
-}
-
-export default Update
+export default Update;
