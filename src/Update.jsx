@@ -1,88 +1,61 @@
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-const Update = () => {
-    let { id } = useParams();
-    const [data, setData] = useState({
-        bookname: '',
-        author: '',
-        des: '',
-        rate: '',
-        img: ''
+const UpdateBook = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [book, setBook] = useState({
+    bookname: '',
+    author: '',
+    des: '',
+    rate: '',
+    img: ''
+  });
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/viewbooks/${id}`);
+        console.log(response);
+        setBook(response.data);
+      } catch (error) {
+        console.error('Error fetching book:', error);
+      }
+    };
+    fetchBook();
+  }, [id]);
+
+  const handleChange = (e) => {
+    setBook({
+      ...book,
+      [e.target.name]: e.target.value
     });
-    const [user, setUser] = useState({});
+  };
 
-    useEffect(() => {
-        let fetchData = async () => {
-            try {
-                let response = await axios.get(`http://localhost:4000/findOne/${id}`);
-                setUser(response.data);
-                setData(response.data); // Initialize data with fetched user data
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        fetchData();
-    }, [id]);
+  const handleUpdate = async () => {
+    try {
+      await axios.put(`http://localhost:4000/update/${id}`, book);
+      toast.success('Book updated successfully');
+      navigate('/');
+    } catch (error) {
+      console.error('Error updating book:', error);
+      toast.error('Error updating book');
+    }
+  };
 
-    let handleChange = (event) => {
-        setData({ ...data, [event.target.name]: event.target.value });
-    };
-
-    let navigate = useNavigate();
-
-    let handleSubmit = async () => {
-        try {
-            let response = await axios.put(`http://localhost:4000/updateOne/${id}`, data);
-            console.log(response);
-            navigate('/');
-        } catch (error) {
-            console.error("Error updating data:", error);
-        }
-    };
-
-    return (
-        <div className='bg'>
-            <input 
-                type="text" 
-                placeholder={user.bookname} 
-                name='bookname' 
-                value={data.bookname}
-                onChange={handleChange} 
-            />
-            <input 
-                type="text" 
-                placeholder={user.author} 
-                name='author' 
-                value={data.author}
-                onChange={handleChange} 
-            />
-            <input 
-                type="text" 
-                placeholder={user.des} 
-                name='des' 
-                value={data.des}
-                onChange={handleChange} 
-            />
-            <input 
-                type="number" 
-                placeholder={user.rate} 
-                name='rate' 
-                value={data.rate}
-                onChange={handleChange} 
-            />
-            <input 
-                type="file" 
-                onChange={handleChange} 
-                name='img'
-                id="image" 
-                alt="bookimg" 
-                src={user.img}
-            />
-            <button onClick={handleSubmit}>update</button>
-        </div>
-    );
+  return (
+    <div>
+      <h2>Update Book</h2>
+      <input type="text" name="bookname" value={book.bookname} onChange={handleChange} placeholder="Book Name" />
+      <input type="text" name="author" value={book.author} onChange={handleChange} placeholder="Author Name" />
+      <input type="text" name="des" value={book.des} onChange={handleChange} placeholder="Description" />
+      <input type="number" name="rate" value={book.rate} onChange={handleChange} placeholder="Rating" />
+      <input type="text" name="img" value={book.img} onChange={handleChange} placeholder="Image URL" />
+      <button onClick={handleUpdate}>Update</button>
+    </div>
+  );
 };
 
-export default Update;
+export default UpdateBook;

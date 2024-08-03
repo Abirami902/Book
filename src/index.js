@@ -24,7 +24,7 @@ root.render(
     <Route path='/Addbook' element={<AddBook/>}></Route>
     <Route path='/login' element={<Login/>}></Route>
     <Route path='/signin' element={<Sign/>}></Route>
-    <Route path='/viewbooks' element={<ViewBook/>}></Route>
+    <Route path='/viewbooks/:id' element={<ViewBook/>}></Route>
 
    </Routes>
    </BrowserRouter>

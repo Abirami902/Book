@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+
 
 const ViewBook = () => {
   const [view, setView] = useState([]);
   const apiUrl = 'http://localhost:4000/viewbooks';
+  const [refresh,setRefresh]=useState(true)
+
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -20,15 +25,24 @@ const ViewBook = () => {
     fetchBook();
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${apiUrl}/${id}`);
-      setView(view.filter(book => book._id !== id));
-    } catch (error) {
-      console.error('Error deleting book:', error);
-      // Handle error state if needed
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   try {
+  //     await axios.delete(`http://localhost:4000/viewbooks/delete/${id}`);
+  //     setView(view.filter(book => book._id !== id));
+  //     toast.success('Book deleted successfully');
+  //   } catch (error) {
+  //     console.error('Error deleting book:', error);
+  //     toast.error('Error deleting book');
+  //   }
+  // };
+
+
+  let handleDelete=async (id)=>{
+    console.log(id);
+    let response=await axios.delete(`http://localhost:4000/deleteData/${id}`) 
+    console.log(response);
+    setRefresh(!refresh)
+}
 
   return (
     <>

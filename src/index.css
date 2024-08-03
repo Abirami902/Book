@@ -179,7 +179,7 @@ textarea {
 }
 
 button {
-  width: 10%;
+  width: 30%;
   padding: 10px;
   background-color: #df1253;
   border: none;
@@ -192,3 +192,10 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+.image{
+height: 350px;
+width:600px;
+margin-left: 150px;
+}
+

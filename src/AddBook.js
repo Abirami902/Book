@@ -3,50 +3,61 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
-import FileBase64 from 'react-file-base64';
 
 
 const AddBook = () => {
     const [data,setData]=useState()
     const [users,setUsers]=useState([])
     const [refresh,setRefresh]=useState(true)
-    const [image,setImage]=useState('')
+    const [photo,setPhoto]=useState('')
 
 
-useEffect(()=>{
-    let fetchdata=async()=>{
-        let response=await axios.get('http://localhost:4000/viewbooks')
-        console.log(response);
-        setUsers(response.data)
-    }
-    fetchdata()
-},[refresh])
+// useEffect(()=>{
+//     let fetchdata=async()=>{
+//         let response=await axios.get('http://localhost:4000/viewbooks')
+//         console.log(response);
+//         setUsers(response.data)
+//     }
+//     fetchdata()
+// },[refresh])
 
-let handleChange=(event)=>{
+const handleChange=(event)=>{
     setData({...data,[event.target.name]:event.target.value})
 
-}
-let handleSubmit=async()=>{
-    try{
+};
 
-        toast.success('Added successful')
-        let response=await axios.post('http://localhost:4000/addbook',{...data,image:image})
-        console.log(response);
-        setRefresh(!refresh)
+console.log(data);
+
+   
+  const handleSubmit = async (e) => {
+    
+    e.preventDefault();
+    const formData = new FormData();
+
+    formData.append('photo', photo);
+    formData.append('bookname', data.bookname);
+    formData.append('author', data.author);
+    formData.append('des',data.des);
+    formData.append('rate', data.rate);
+
+
+    try {
+      await axios.post('http://localhost:4000/addbook', formData,{
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      setPhoto(null);
+      setData('');
+      setRefresh(!refresh);
+      toast.success(' Book Added successfully');
+    } catch (e) {
+        toast.error(e || 'Error in adding ')
     }
-    catch(e){
-        console.log(e.response.data);
-        toast.error(e.response.data)
-    }
+  };
 
 
-}
-let handleDelete=async (id)=>{
-    console.log(id);
-    let response=await axios.delete(`http://localhost:4000/deleteData/${id}`) 
-    console.log(response);
-    setRefresh(!refresh)
-}
   return (
     <div className='bg'>
         <ToastContainer
@@ -103,16 +114,21 @@ theme="light"
             />
           </div>
 
-
-
           <div className="form-group">
-            <label htmlFor="image">Image URL</label>
+            <label htmlFor="rating">Rating</label>
+            <input
+              type="file"
+              name='photo'
+              placeholder='photo'
+              onChange={((e)=>{setPhoto(e.target.files[0])})}
 
-            <FileBase64
-        multiple={ false }y
-        onDone={(res)=>setImage(res.base64)  } />
+            />
+          </div>
+
+       
+         
 <button onClick={handleSubmit}>ADD</button>
-<img src={image} width='200px' alt="" />
+{/* <img src={image} width='200px' alt="" /> */}
 
 <div>
 </div>
@@ -120,7 +136,6 @@ theme="light"
     </div>
 </div>
 
-    </div>
   )
 }
 
