@@ -27,8 +27,6 @@ const Navbar = () => {
         <Outlet />
 <div className="home">
 
-<img src="bg img.jpg" alt="Logo"  className=" image"  />
-{/* <img src="4.webp" alt="Logo"  className="image" /> */}
 
 
 </div>
